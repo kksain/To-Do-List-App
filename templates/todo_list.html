@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        padding-top: 50px;
+      }
+      .container {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .list-group-item {
+        position: relative;
+      }
+      .list-group-item .btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .btn-delete {
+        right: 10px;
+      }
+      .btn-complete {
+        right: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="mb-4">To-Do List</h2>
+      <ul class="list-group">
+        {% for task in tasks %}
+          <li class="list-group-item {% if task.completed %}{% endif %}">
+            {{ task.title }}
+            {% if not task.completed %}
+              <a href="{% url 'complete_task' task.id %}" class="btn btn-success btn-sm btn-complete">Complete</a>
+            {% endif %}
+            <a href="{% url 'delete_task' task.id %}" class="btn btn-danger btn-sm btn-delete">Delete</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <form action="{% url 'add_task' %}" method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="text" name="title" class="form-control" placeholder="Add new task" />
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">Add Task</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
